@@ -1,0 +1,386 @@
+{% extends 'base.html' %}
+
+{% block  title%}
+评论分析图
+{% endblock %}
+
+{% block sidebar%}
+    <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'home' %}">
+          <i class="bi bi-grid"></i>
+          <span>首页</span>
+        </a>
+      </li>
+      <li class="nav-heading">个人信息</li>
+      <li class="nav-item">
+        <a class="nav-link collapsed"  href="{% url 'changeSelfInfo' %}">
+          <i class="bi bi-menu-button-wide"></i><span>修改信息</span></i>
+        </a>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed"  href="{% url 'changePassword' %}">
+          <i class="bi bi-journal-text"></i><span>修改密码</span>
+        </a>
+      </li>
+      <li class="nav-heading">数据表格</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'tableData' %}">
+          <i class="bi bi-layout-text-window-reverse"></i><span>数据操作</span>
+        </a>
+      </li>
+      <li class="nav-heading">数据可视化</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed"  href="{% url 'cityChar' %}">
+          <i class="bi bi-bar-chart"></i><span>城市和景点等级分析</span></i>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'rateChar' %}">
+          <i class="bi bi-gem"></i><span>评分情况分析</span>
+        </a>
+      </li><!-- End Icons Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'priceChar' %}">
+          <i class="bi bi-person"></i>
+          <span>价格销量分析</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'commentsChar' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>评论分析</span>
+        </a>
+      </li>
+      <li class="nav-heading">推荐功能</li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'recommendation' %}">
+          <i class="bi bi-envelope"></i>
+          <span>推荐算法</span>
+        </a>
+      </li><!-- End Contact Page Nav -->
+      <li class="nav-heading">词云图</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'detailIntroCloud' %}">
+          <i class="bi bi-card-list"></i>
+          <span>详情简介词云图</span>
+        </a>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'commentContentCloud' %}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>评论内容词云图</span>
+        </a>
+      </li>
+    </ul>
+
+  </aside>
+
+{% endblock %}
+
+
+{% block content %}
+      <div class="pagetitle" style="display: flex;align-items: center">
+      <div style="margin-right: auto">
+          <h1>评论分析图</h1>
+        <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">数据可视化</a></li>
+          <li class="breadcrumb-item active">评论分析页面</li>
+        </ol>
+      </nav>
+      </div>
+        <h5 style="font-weight: normal">
+            {{ nowTime.year }} - {{ nowTime.mon }} - {{ nowTime.day }}
+        </h5>
+    </div>
+
+
+      <section class="section dashboard">
+              <div class="row">
+                <div class="col-lg-8">
+
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">评论时间分析表</span></h5>
+                        <div id="mains" style="width:100%;height: 450px"></div>
+
+
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-lg-4">
+
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">评论评分等级占比</span></h5>
+                        <div id="mainsTwo" style="width:100%;height: 450px"></div>
+
+
+                    </div>
+                  </div>
+
+                </div>
+                  <div class="col-lg-12">
+
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">评论个数分析图</span></h5>
+                        <div id="mainsThree" style="width:100%;height: 450px"></div>
+
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </section>
+
+
+{% endblock %}
+
+{% block echarts%}
+    <script>
+        var chartDom = document.getElementById('mains');
+        var myChart = echarts.init(chartDom);
+        var option;
+          myChart.setOption(
+            (option = {
+              title: {
+                text: '评论时间个数折线图',
+                left: '1%'
+              },
+              tooltip: {
+                trigger: 'axis'
+              },
+              grid: {
+                left: '5%',
+                right: '15%',
+                bottom: '10%'
+              },
+              xAxis: {
+                data: {{ echartsData.xData | safe }}
+              },
+              yAxis: {},
+              toolbox: {
+                right: 10,
+                feature: {
+                  dataZoom: {
+                    yAxisIndex: 'none'
+                  },
+                  restore: {},
+                  saveAsImage: {}
+                }
+              },
+              dataZoom: [
+                {
+                  startValue: '2022-08-25'
+                },
+                {
+                  type: 'inside'
+                }
+              ],
+              visualMap: {
+                top: 50,
+                right: 10,
+                pieces: [
+                  {
+                    gt: 0,
+                    lte: 2,
+                    color: '#93CE07'
+                  },
+                  {
+                    gt: 2,
+                    lte: 4,
+                    color: '#FBDB0F'
+                  },
+                  {
+                    gt: 4,
+                    lte: 6,
+                    color: '#FC7D02'
+                  },
+                  {
+                    gt: 6,
+                    lte: 10,
+                    color: '#FD0100'
+                  },
+                  {
+                    gt: 10,
+                    lte: 20,
+                    color: '#AA069F'
+                  }
+                ],
+                outOfRange: {
+                  color: '#999'
+                }
+              },
+              series: {
+                name: '个数',
+                type: 'line',
+                data: {{ echartsData.yData }},
+                markLine: {
+                  silent: true,
+                  lineStyle: {
+                    color: '#333'
+                  },
+                  data: [
+                    {
+                      yAxis: 50
+                    },
+                    {
+                      yAxis: 100
+                    },
+                    {
+                      yAxis: 150
+                    },
+                    {
+                      yAxis: 200
+                    },
+                    {
+                      yAxis: 300
+                    }
+                  ]
+                }
+              }
+            })
+          );
+
+        option && myChart.setOption(option);
+
+    </script>
+    <script>
+    var chartDom = document.getElementById('mainsTwo');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+      title: {
+        text: '评论等级个数',
+        left: 'center'
+      },
+      tooltip: {
+        trigger: 'item'
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'left'
+      },
+      series: [
+        {
+          name: '评论等级',
+          type: 'pie',
+          radius: '50%',
+          data: {{ echartsData.commentsScorePieData | safe }},
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }
+      ]
+    };
+
+    option && myChart.setOption(option);
+
+    </script>
+    <script>
+        var chartDom = document.getElementById('mainsThree');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        // prettier-ignore
+        let dataAxis = {{ echartsData.x1Data | safe }}
+        // prettier-ignore
+        let data = {{ echartsData.y1Data }}
+        let yMax = 500;
+        let dataShadow = [];
+        for (let i = 0; i < data.length; i++) {
+          dataShadow.push(yMax);
+        }
+        option = {
+            title: {
+        text: '各景点评论总量区间分析图',
+        left: 'center'
+      },
+          xAxis: {
+            data: dataAxis,
+            axisLabel: {
+              inside: true,
+              color: '#fff'
+            },
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            },
+            z: 10
+          },
+          yAxis: {
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              color: '#999'
+            }
+          },
+          dataZoom: [
+            {
+              type: 'inside'
+            }
+          ],
+          series: [
+            {
+              type: 'bar',
+              showBackground: true,
+              itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: '#83bff6' },
+                  { offset: 0.5, color: '#188df0' },
+                  { offset: 1, color: '#188df0' }
+                ])
+              },
+              emphasis: {
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: '#2378f7' },
+                    { offset: 0.7, color: '#2378f7' },
+                    { offset: 1, color: '#83bff6' }
+                  ])
+                }
+              },
+              data: data
+            }
+          ]
+        };
+        // Enable data zoom when user click bar.
+        const zoomSize = 6;
+        myChart.on('click', function (params) {
+          console.log(dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)]);
+          myChart.dispatchAction({
+            type: 'dataZoom',
+            startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
+            endValue:
+              dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
+          });
+        });
+
+        option && myChart.setOption(option);
+
+    </script>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block title %}
+    推荐页面
+{% endblock %}
+
+{% block sidebar%}
+    <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'home' %}">
+          <i class="bi bi-grid"></i>
+          <span>首页</span>
+        </a>
+      </li>
+      <li class="nav-heading">个人信息</li>
+      <li class="nav-item">
+        <a class="nav-link collapsed"  href="{% url 'changeSelfInfo' %}">
+          <i class="bi bi-menu-button-wide"></i><span>修改信息</span></i>
+        </a>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed"  href="{% url 'changePassword' %}">
+          <i class="bi bi-journal-text"></i><span>修改密码</span>
+        </a>
+      </li>
+      <li class="nav-heading">数据表格</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'tableData' %}">
+          <i class="bi bi-layout-text-window-reverse"></i><span>数据操作</span>
+        </a>
+      </li>
+      <li class="nav-heading">数据可视化</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed"  href="{% url 'cityChar' %}">
+          <i class="bi bi-bar-chart"></i><span>城市和景点等级分析</span></i>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'rateChar' %}">
+          <i class="bi bi-gem"></i><span>评分情况分析</span>
+        </a>
+      </li><!-- End Icons Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'priceChar' %}">
+          <i class="bi bi-person"></i>
+          <span>价格销量分析</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'commentsChar' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>评论分析</span>
+        </a>
+      </li>
+      <li class="nav-heading">推荐功能</li>
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'recommendation' %}">
+          <i class="bi bi-envelope"></i>
+          <span>推荐算法</span>
+        </a>
+      </li><!-- End Contact Page Nav -->
+      <li class="nav-heading">词云图</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'detailIntroCloud' %}">
+          <i class="bi bi-card-list"></i>
+          <span>详情简介词云图</span>
+        </a>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'commentContentCloud' %}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>评论内容词云图</span>
+        </a>
+      </li>
+    </ul>
+
+  </aside>
+
+{% endblock %}
+
+
+{% block content %}
+      <div class="pagetitle" style="display: flex;align-items: center">
+      <div style="margin-right: auto">
+          <h1>景点推荐</h1>
+        <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">数据可视化</a></li>
+          <li class="breadcrumb-item active">景点推荐</li>
+        </ol>
+      </nav>
+      </div>
+        <h5 style="font-weight: normal">
+            {{ nowTime.year }} - {{ nowTime.mon }} - {{ nowTime.day }}
+        </h5>
+    </div>
+
+
+      <section class="section dashboard">
+
+            <div class="row">
+                {% for i in resultDataList %}
+                     <div class="col-lg-4">
+                                  <div class="card">
+                                        <div class="card-body">
+                                          <h5 class="card-title">{{ i.title }}</h5>
+			<img style="width:80%" src="{{ i.cover }}" alt="">
+ 
+                                            <div style="margin:7px 0">
+                                                评分：<span class="badge bg-primary">{{ i.score }}分</span>
+                                            </div>
+
+                                            <div style="margin:7px 0">
+                                                等级：<span class="" style="color: #f60">{{ i.level }}</span>
+                                            </div>
+
+
+                                            <div style="margin:7px 0">
+                                                价格：<span class="" style="color:#008c8c">${{ i.price }}元</span>
+                                             </div>
+                                            <div style="margin:7px 0">
+                                                详情地址：<span class="" >{{ i.detailAddress }}</span>
+                                            </div>
+                                            <div style="margin:7px 0">
+                                                {% for img in i.img_list %}
+                                                    <img style="width:20%;border:2px solid #ccc;padding:5px;margin-right:5px;margin-bottom: 5px" src="{{ img }}" alt="">
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                  </div>
+                    </div>
+               {% endfor %}
+        </div>
+
+            </section>
+
+
+{% endblock %}
+
+{% block echarts%}
+    <script>
+
+    </script>
+{% endblock %}

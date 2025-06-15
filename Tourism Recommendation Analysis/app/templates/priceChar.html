@@ -1,0 +1,340 @@
+{% extends 'base.html' %}
+
+{% block  title%}
+价格和月销量分析
+{% endblock %}
+
+{% block sidebar%}
+    <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'home' %}">
+          <i class="bi bi-grid"></i>
+          <span>首页</span>
+        </a>
+      </li>
+      <li class="nav-heading">个人信息</li>
+      <li class="nav-item">
+        <a class="nav-link collapsed"  href="{% url 'changeSelfInfo' %}">
+          <i class="bi bi-menu-button-wide"></i><span>修改信息</span></i>
+        </a>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed"  href="{% url 'changePassword' %}">
+          <i class="bi bi-journal-text"></i><span>修改密码</span>
+        </a>
+      </li>
+      <li class="nav-heading">数据表格</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'tableData' %}">
+          <i class="bi bi-layout-text-window-reverse"></i><span>数据操作</span>
+        </a>
+      </li>
+      <li class="nav-heading">数据可视化</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed"  href="{% url 'cityChar' %}">
+          <i class="bi bi-bar-chart"></i><span>城市和景点等级分析</span></i>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'rateChar' %}">
+          <i class="bi bi-gem"></i><span>评分情况分析</span>
+        </a>
+      </li><!-- End Icons Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'priceChar' %}">
+          <i class="bi bi-person"></i>
+          <span>价格销量分析</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'commentsChar' %}">
+          <i class="bi bi-question-circle"></i>
+          <span>评论分析</span>
+        </a>
+      </li>
+      <li class="nav-heading">推荐功能</li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'recommendation' %}">
+          <i class="bi bi-envelope"></i>
+          <span>推荐算法</span>
+        </a>
+      </li><!-- End Contact Page Nav -->
+      <li class="nav-heading">词云图</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'detailIntroCloud' %}">
+          <i class="bi bi-card-list"></i>
+          <span>详情简介词云图</span>
+        </a>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'commentContentCloud' %}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>评论内容词云图</span>
+        </a>
+      </li>
+    </ul>
+
+  </aside>
+
+{% endblock %}
+
+
+{% block content %}
+      <div class="pagetitle" style="display: flex;align-items: center">
+      <div style="margin-right: auto">
+          <h1>价格和月销量分析</h1>
+        <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">数据可视化</a></li>
+          <li class="breadcrumb-item active">价格和月销量分析</li>
+        </ol>
+      </nav>
+      </div>
+        <h5 style="font-weight: normal">
+            {{ nowTime.year }} - {{ nowTime.mon }} - {{ nowTime.day }}
+        </h5>
+    </div>
+
+
+      <section class="section dashboard">
+              <div class="row">
+                <div class="col-lg-6">
+
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">景点价格分析</span></h5>
+                        <div id="mains" style="width:100%;height: 450px"></div>
+
+
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-lg-6">
+
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">景点销量分析</span></h5>
+                        <div id="mainsTwo" style="width:100%;height: 450px"></div>
+
+
+                    </div>
+                  </div>
+
+                </div>
+                  <div class="col-lg-6">
+
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">折扣占比分析</span></h5>
+                        <div id="mainsThree" style="width:100%;height: 450px"></div>
+
+
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </section>
+
+
+{% endblock %}
+
+{% block echarts%}
+    <script>
+        var chartDom = document.getElementById('mains');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+          title: {
+            text: '景点价格趋势分析'
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'cross'
+            }
+          },
+          legend: {},
+          toolbox: {
+            show: true,
+            feature: {
+              saveAsImage: {}
+            }
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            // prettier-ignore
+            data: {{ echartsData.xData  |safe}}
+          },
+          yAxis: {
+            type: 'value',
+            axisLabel: {
+              formatter: '{value} 个'
+            },
+            axisPointer: {
+              snap: true
+            }
+          },
+          visualMap: {
+            show: false,
+            dimension: 0,
+            pieces: [
+              {
+                lte: 0,
+                color: 'green'
+              },
+              {
+                gt: 0,
+                lte: 1,
+                color: 'red'
+              },
+              {
+                gt: 1,
+                lte: 4,
+                color: 'green'
+              },
+              {
+                gt: 4,
+                lte: 5,
+                color: 'red'
+              },
+              {
+                gt: 5,
+                color: 'green'
+              }
+            ]
+          },
+          series: [
+            {
+              name: '价格区间个数',
+              type: 'line',
+              smooth: true,
+              // prettier-ignore
+              data: {{ echartsData.yData }},
+              markArea: {
+                itemStyle: {
+                  color: 'rgba(255, 173, 177, 0.4)'
+                },
+                data: [
+                  [
+                    {
+                      name: '起伏趋势较高',
+                      xAxis: '免费'
+                    },
+                    {
+                      xAxis: '100元以内'
+                    }
+                  ],
+                    [
+                    {
+                      name: '较为平缓',
+                      xAxis: '400元以内'
+                    },
+                    {
+                      xAxis: '500元以内'
+                    }
+                  ]
+                ]
+              }
+            }
+          ]
+        };
+
+        option && myChart.setOption(option);
+
+    </script>
+    <script>
+var chartDom = document.getElementById('mainsTwo');
+        var myChart = echarts.init(chartDom);
+        var option;
+        option = {
+            xAxis: {
+                type: 'category',
+                data: {{ echartsData.x1Data |safe }},
+            },
+            yAxis: {
+                type: 'value',
+                name: '销量个数',
+            },
+            legend:{
+
+            },
+            dataZoom: [
+        {
+          show: true,
+          start: 0,
+          end: 20
+        }
+      ],
+            series: [{
+                name: '销量个数',
+                type: 'bar',
+                data: {{ echartsData.y1Data }},
+                itemStyle: {
+                    color: '#2f4554', // 柱状图颜色
+                    emphasis: {
+                        color: '#c23531', // 鼠标悬停时的颜色
+                    }
+                },
+                label: {
+                    show: true,
+                    position: 'top',
+                }
+            }],
+            animationEasing: 'elasticOut', // 动画效果
+            animationDelay: function (idx) {
+                return idx * 100; // 动画延迟时间
+            },
+        }
+        option && myChart.setOption(option);
+
+
+    </script>
+    <script>
+var chartDom = document.getElementById('mainsThree');
+var myChart = echarts.init(chartDom);
+var option;
+
+option = {
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+    orient: 'vertical',
+    left: 'left',
+      type: 'scroll',
+  },
+  series: [
+    {
+      name: '折扣占比个数',
+      type: 'pie',
+      radius: '50%',
+      data: {{ echartsData.disCountPieData | safe }},
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }
+  ]
+};
+
+option && myChart.setOption(option);
+
+    </script>
+{% endblock %}

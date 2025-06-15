@@ -1,0 +1,13 @@
+部署命令：
+
+1、先创建虚拟环境venv
+
+2、进去虚拟环境:
+cd venv/Scripts
+
+3、运行如下命令：
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r ../../requirements.txt
+
+4、运行成功之后复制下面这个链接然后再游览器打开
+
+http://127.0.0.1:8000/app/login/

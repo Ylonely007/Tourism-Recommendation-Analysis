@@ -1,0 +1,47 @@
+Python 旅游推荐数据分析可视化部署文档
+环境要求
+1.	Python版本: 3.8或以上
+2.	依赖库:
+Django
+Pandas
+NumPy
+Matplotlib
+Seaborn
+Jupyter Notebook 
+部署步骤
+1. 环境准备
+确保你的系统已安装 Python 3.x 和 pip。如果未安装，请访问 Python官网 下载并安装。
+2. 创建虚拟环境
+在项目根目录下创建并激活虚拟环境：
+bash
+# 创建虚拟环境
+python -m venv venv
+
+# 激活虚拟环境
+# Windows
+venv\Scripts\activate
+# macOS/Linux
+source venv/bin/activate
+3. 安装依赖库
+在虚拟环境中安装所需的依赖库：
+bash
+pip install django pandas numpy matplotlib seaborn
+4. 项目设置
+将项目代码复制到虚拟环境所在的目录中，确保 manage.py 文件在根目录下。
+5. 数据库迁移
+运行数据库迁移命令：
+python manage.py migrate
+6. 运行服务器
+启动开发服务器以查看可视化效果：
+python manage.py runserver
+打开浏览器并访问 http://127.0.0.1:8000/ 查看项目。
+7. 停止服务器
+按 Ctrl+C 停止开发服务器。
+常用命令总结
+•	启动服务器: python manage.py runserver
+•	数据库迁移: python manage.py migrate
+•	创建新应用: python manage.py startapp app_name
+•	创建超级用户: python manage.py createsuperuser
+额外说明
+请确保数据库连接设置在 settings中正确配置。
+

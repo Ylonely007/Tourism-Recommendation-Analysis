@@ -1,0 +1,11 @@
+Django
+numpy
+scikit-learn
+requests
+lxml
+pandas
+jieba
+matplotlib
+wordcloud
+pillow
+PyMySQL
